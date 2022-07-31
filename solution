@@ -1,0 +1,203 @@
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.FlowLayout;
+import java.awt.*; 
+import java.util.*;
+
+//Bulls and Cows by OlegTim
+public class Solution extends JFrame implements ActionListener
+{
+         
+    public static String s = "Enter 4 different digits";
+public static String s2 = "0123";
+public static String sec = "????";
+public static int cheat  = 0;
+public int a;
+ public    JTextField smallField;
+public static int bulls=0;
+public static int cows=0;
+Label label;
+Label secret;
+JPanel contents;
+Button button1; 
+
+    public Solution()
+    {
+       super("Bulls and Cows by OlegTim");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+secret = new Label();
+      label = new Label();
+        smallField = new JTextField(4);
+   
+        smallField.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                message();
+            }
+        });
+
+       
+     contents = new JPanel(new FlowLayout(FlowLayout.LEFT));
+gen();
+if (cheat<1){
+secret.setText(sec);
+}
+else{
+secret.setText(s2);
+}
+contents.add(secret);
+
+
+        contents.add(smallField);
+label.setText(s);
+contents.add(label);
+
+button1= new Button("show_hide"); 
+contents.add(button1); 
+button1.addActionListener(this);
+
+        setContentPane(contents);
+        setSize(400, 130);
+        setVisible(true);
+    }
+
+
+    public static void main(String[] args) {
+        new Solution();
+    }
+
+
+public void message(){
+s=smallField.getText();
+smallField.setText("");
+
+if (s.length()!=4){
+s="not 4 elements";
+}
+else{
+
+try {
+int inttr = Integer.parseInt(s);
+
+HashSet<String> h = new HashSet<String>();
+h.add(s.substring(0,1));
+h.add(s.substring(1,2));
+h.add(s.substring(2,3));
+h.add(s.substring(3));
+
+if (h.size()!=4){
+s="same digits";
+}
+else{count();}
+
+} 
+catch (NumberFormatException e) {
+    s="not digits";
+}
+
+}
+
+label.setText(s);
+contents.add(label);
+contents.setVisible(true);
+}
+
+public void count(){
+
+if (s2.contains(s.substring(0,1)))
+cows++;
+if (s2.contains(s.substring(1,2)))
+cows++;
+if (s2.contains(s.substring(2,3)))
+cows++;
+if (s2.contains(s.substring(3)))
+cows++;
+
+if (s.substring(0,1).equals(s2.substring(0,1)))
+bulls++;
+if (s.substring(1,2).equals(s2.substring(1,2)))
+bulls++;
+if (s.substring(2,3).equals(s2.substring(2,3)))
+bulls++;
+if (s.substring(3).equals(s2.substring(3)))
+bulls++;
+cows=cows-bulls;
+
+if (bulls==4){
+s=s+" Win! Enter new!";
+gen();
+label.setText(s);
+contents.add(label);
+
+if (cheat<1){
+secret.setText(sec);
+}
+else{
+secret.setText(s2);
+}
+
+contents.add(secret);
+bulls=0; cows=0;
+contents.setVisible(true);
+}
+else{
+s=s+":"+String.valueOf(bulls)+"b"+String.valueOf(cows)+"c ";
+label.setText(s);
+contents.add(label);
+contents.setVisible(true);
+bulls=0; cows=0;
+}}
+
+public void gen(){
+a = (int) ( Math.random() * 10000 );
+gen2();
+}
+
+public void gen2(){
+String temp = String.valueOf(a);
+
+HashSet<String> h = new HashSet<String>();
+h.add(temp.substring(0,1));
+h.add(temp.substring(1,2));
+h.add(temp.substring(2,3));
+h.add(temp.substring(3));
+
+if (h.size()!=4||temp.contains("0")){
+gen();
+}
+else{
+s2="";
+
+if (a<1000){
+s2=s2+"0";}
+
+s2=s2+temp;
+}
+}
+
+public void actionPerformed(ActionEvent ae) 
+{
+if(ae.getActionCommand().equals("show_hide"))
+{
+
+if (cheat<1){
+cheat=1;
+}else{
+cheat = 0;
+}
+
+
+if (cheat<1){
+secret.setText(sec);
+}
+else{
+
+secret.setText(s2);
+}
+contents.add(secret);
+contents.add(button1);
+
+contents.setVisible(true);
+}
+}
+
+}
